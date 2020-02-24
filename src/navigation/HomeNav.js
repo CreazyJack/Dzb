@@ -40,7 +40,7 @@ export default class Nav extends React.PureComponent {
             component={HomeScreen}
             options={({ navigation }) => ({
               title: 'Home',
-              headerRight: ({ tintColor }) => <HomeRightBtn tintColor={tintColor} navigate={navigation.navigate} purpose='TagScreen' />
+              headerRight: ({ tintColor }) => <HomeRightBtn tintColor={tintColor} navigate={navigation.navigate} purpose='TagScreen' name='新建分类' />
             })}
           />
           <Stack.Screen
@@ -50,12 +50,12 @@ export default class Nav extends React.PureComponent {
               title: '新建分类'
             }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="TagContentScreen"
             component={TagContentScreen}
             options={({ route, navigation }) => ({
               title: route.params.name,
-              headerRight: ({ tintColor }) => <HomeRightBtn tintColor={tintColor} navigate={navigation.navigate} purpose='HomeScreen' />
+              headerRight: ({ tintColor }) => <HomeRightBtn tintColor={tintColor} navigate={navigation.navigate} purpose='NoteScreen' name='添加想法' tagIndex={route.params.tagIndex} />
             })}
           />
           <Stack.Screen
@@ -64,7 +64,7 @@ export default class Nav extends React.PureComponent {
             options={({ route, navigation }) => ({
               title: route.params.name
             })}
-          /> */}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     )

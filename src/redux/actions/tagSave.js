@@ -8,3 +8,14 @@ export const tagSave = (data) => {
     }
   }
 }
+
+export const noteSave = (data, changeData, tagIndex, color) => {
+  // const listData = []
+  data[tagIndex].noteList.push({ text: changeData, color })
+  return {
+    type: actionType.SaveNote,
+    payload: {
+      listData: data
+    }
+  }
+}

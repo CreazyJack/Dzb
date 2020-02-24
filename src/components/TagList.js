@@ -3,18 +3,17 @@ import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { height } from '../constant/theme'
 import { AntDesign } from '@expo/vector-icons'
 import TagBox from './TagBox'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 class TagList extends Component {
   state = {
 
   }
   render() {
-    console.log(this.props.tagList)
     return (
       <FlatList
         data={this.props.tagList}
-        renderItem={({ item, index }) => <TagBox data={item} index={index} toTagContent={this.props.toTagContent} />}
+        renderItem={({ item, index }) => <TagBox data={item} index={index} toTagContent={this.props.toTagContent} userSetting={this.props.userSetting} />}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         ListEmptyComponent={
@@ -72,6 +71,6 @@ const styles = StyleSheet.create({
   }
 })
 
-const mapState = state => ({ listData: state.tagReducer })
-export default connect(mapState)(TagList)
-// export default TagList
+// const mapState = state => ({ listData: state.tagReducer })
+// export default connect(mapState)(TagList)
+export default TagList

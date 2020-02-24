@@ -3,13 +3,13 @@ import thunk from 'redux-thunk'
 import reducers from './reducers/reducers'
 import { AsyncStorage } from 'react-native'
 import { persistStore, persistReducer } from 'redux-persist'
-import noteReducer from './reducers/noteReducer'
+import noteReducer from './reducers/userReducer'
 // import { persistStore, autoRehydrate } from 'redux-persist-immutable'
 
 const persistConfig = {
   key: 'data', // 对于数据 key 的定义
   storage: AsyncStorage,  // 选择的存储引擎
-  blacklist: ['tagReducer', 'noteReducer']
+  blacklist: ['tagReducer', 'userReducer']
 }
 
 // 对 reducers 的封装处理

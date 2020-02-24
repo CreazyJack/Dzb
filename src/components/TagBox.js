@@ -1,16 +1,22 @@
 import React, { PureComponent } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
-import { width, height, colors } from '../constant/theme'
-
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { width } from '../constant/theme'
 
 export default class TagBox extends PureComponent {
   render() {
     return (
       <TouchableOpacity
-        style={styles.container}
+        style={{ ...styles.container, borderColor: this.props.data.color }}
         onPress={() => this.props.toTagContent(this.props.data.tagName, this.props.index)}
       >
-        <Text style={styles.text}>{this.props.data.tagName}</Text>
+        <Text
+          style={{
+            ...styles.text,
+            fontSize: this.props.userSetting.tagFontSize,
+            color: this.props.data.color,
+          }}>
+          {this.props.data.tagName}
+        </Text>
       </TouchableOpacity>
     )
   }
@@ -23,7 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: colors.primary,
     marginTop: 20,
     marginLeft: width * 0.07,
     justifyContent: 'center',
@@ -31,7 +36,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: colors.primary,
     width: width * 0.3,
     textAlign: 'center',
   }

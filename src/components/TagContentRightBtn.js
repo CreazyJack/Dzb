@@ -3,8 +3,8 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
 
-const HomeRightBtn = ({ tintColor, navigate, purpose, name, tagIndex }) => {
-  // console.log(tagIndex)
+const TagContentRightBtn = ({ tintColor, navigate, purpose, name, tagIndex }) => {
+  console.log(tagIndex)
   return (
     <TouchableOpacity
       style={styles.rightBtn}
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HomeRightBtn
+export default TagContentRightBtn

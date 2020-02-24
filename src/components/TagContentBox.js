@@ -5,12 +5,21 @@ import { width, height, colors } from '../constant/theme'
 
 export default class TagBox extends PureComponent {
   render() {
+    console.log(this.props.userSetting, this.props.data)
     return (
       <TouchableOpacity
-        style={styles.container}
+        style={{ ...styles.container, borderColor: this.props.data.color }}
         onPress={() => this.props.toNote('修改内容')}
       >
-        <Text style={styles.text}>{this.props.data.content}</Text>
+        <Text style={{
+          ...styles.text,
+          fontSize: this.props.userSetting.tagFontSize,
+          color: this.props.data.color,
+        }}
+          numberOfLines={1}
+        >
+          {this.props.data.text}
+        </Text>
       </TouchableOpacity>
     )
   }

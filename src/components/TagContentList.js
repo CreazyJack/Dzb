@@ -10,7 +10,7 @@ export default class TagContentList extends PureComponent {
     return (
       <FlatList
         data={this.props.listData}
-        renderItem={({ item, index }) => <TagContentBox data={item} index={index} toNote={this.props.toNote} />}
+        renderItem={({ item, index }) => <TagContentBox data={item} index={index} toNote={this.props.toNote} userSetting={this.props.userSetting} />}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
           <View style={styles.emptyBox}>
@@ -24,15 +24,15 @@ export default class TagContentList extends PureComponent {
               哎呀，还没有内容，点击下面添加第一条想法
           </Text> */}
             <TouchableOpacity
-              style={styles.plusBox}
+              style={{ ...styles.plusBox, borderColor: this.props.color }}
               onPress={() => this.props.toNote('添加想法')}
             >
               <AntDesign
                 name='plus'
                 size={90}
-                color='#f4511e'
+                color={this.props.color}
               />
-              <Text style={styles.plusText}>
+              <Text style={{ ...styles.plusText, color: this.props.color }}>
                 添加想法
             </Text>
             </TouchableOpacity>
@@ -57,12 +57,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 200,
     borderWidth: 1,
-    borderColor: '#f4511e',
     borderRadius: 10
   },
   plusText: {
     marginTop: 20,
     fontSize: 16,
-    color: '#f4511e'
   }
 })

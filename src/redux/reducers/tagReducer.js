@@ -9,7 +9,12 @@ export default (state = initState, action) => {
   // 根据不同的 action.type ，做不同的处理，每次返回一个新的 state ，返回的类型要一样
   switch (action.type) {
     case actionType.SaveTag:
-      return [...state,action.payload.data]
+      return [...state, action.payload.data]
+    case actionType.SaveNote:
+      var listData1 = JSON.stringify(action.payload.listData)
+      var listData2 = JSON.parse(listData1)
+      console.log(listData2)
+      return listData2
     // 一定要有一个 default ，当 actionType 不对的时候，就不做任何处理，返回上一次的 state 
     default:
       return state

@@ -7,20 +7,20 @@ import { tagSave } from '../redux/actions/tagSave'
 
 class Home extends React.PureComponent {
 	render() {
-		console.log(this.props.tagList)
 		return (
 			<View style={styles.container}>
 				<TagList
 					newTag={this.newTag}
 					toTagContent={this.toTagContent}
 					tagList={this.props.tagList}
+					userSetting={this.props.userSetting}
 				/>
 			</View>
 		)
 	}
 
-	toTagContent = (name,index) => {
-		this.props.navigation.navigate('TagContentScreen', { name,index })
+	toTagContent = (name, tagIndex) => {
+		this.props.navigation.navigate('TagContentScreen', { name, tagIndex })
 	}
 
 	newTag = () => {
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
 
 
-const mapState = state => ({ tagList: state.tagReducer, count: state.noteReducer })
+const mapState = state => ({ tagList: state.tagReducer, userSetting: state.userReducer })
 
 export default connect(mapState, { tagSave })(Home)
 
