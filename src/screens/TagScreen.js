@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, Keyboard } from 'react-native'
 import { colors } from '../constant/theme'
 import { connect } from 'react-redux'
-import { tagSave } from '../redux/actions/tagSave'
+import { tagSave, changeTag } from '../redux/actions/tagSave'
 import { Overlay } from 'react-native-elements'
 import ThemList from '../components/ThemList'
 
@@ -11,9 +11,13 @@ class TagScreen extends Component {
   state = {
     text: null,
     isVisible: false,
-    themeColor: '#f4511e',
+    themeColor: null,
+    isSaving: false
   }
   render() {
+    // console.log(this.props.route.params)
+    const name = this.props.route.params.name || null
+    const changeTag = this.props.route.params.changeTag || null
     const userData = this.props.userSetting
     return (
       <View style={styles.container}>
@@ -24,6 +28,7 @@ class TagScreen extends Component {
             placeholder='不超过十个字'
             maxLength={10}
             onChangeText={value => this.setState({ text: value })}
+            defaultValue={changeTag ? name : null}
           />
         </View>
         <TouchableOpacity
@@ -37,7 +42,7 @@ class TagScreen extends Component {
           style={{ ...styles.subBtn, borderColor: userData.color }}
           onPress={this.subBtn}
         >
-          <Text style={{ ...styles.subTxt, color: userData.color }}>保存</Text>
+          <Text style={{ ...styles.subTxt, color: userData.color }}>{changeTag ? '保存修改' : '新建分类'}</Text>
         </TouchableOpacity>
 
         <Overlay
@@ -53,7 +58,19 @@ class TagScreen extends Component {
       </View>
     )
   }
-
+  theme = () => {
+    if (this.props.route.params.changeTag) {
+      const index = this.props.route.params.tagIndex
+      const tagColor = this.props.tagList[index].color
+      this.setState({
+        themeColor: tagColor
+      })
+      return
+    }
+    this.setState({
+      themeColor: this.props.userSetting.color
+    })
+  }
   saveData = () => {
     const tagData = {
       tagName: this.state.text,
@@ -63,14 +80,34 @@ class TagScreen extends Component {
     this.props.tagSave(tagData)
   }
   subBtn = () => {
-    if (!this.state.text) {
-      Alert.alert('内容不能为空')
+    const data = this.props.tagList
+    const changeData = this.state.text
+    const tagIndex = this.props.route.params.tagIndex
+    const color = this.state.themeColor
+    if (this.state.isSaving === true) {
       return
     }
-    this.saveData()
+    if (!changeData) {
+      if (this.props.route.params.changeTag) {
+        data[tagIndex].color = color
+        this.props.changeTag(data)
+        this.props.navigation.navigate('Home')
+        return
+      }
+      Alert.alert('请先输入内容再保存哦')
+      return
+    }
+    if (this.props.route.params.changeTag) {
+      data[tagIndex].color = color
+      data[tagIndex].tagName = changeData
+      this.props.changeTag(data)
+    } else {
+      this.saveData()
+    }
     this.props.navigation.navigate('Home')
   }
   changeTheme = () => {
+    Keyboard.dismiss()
     this.setState({
       isVisible: true
     })
@@ -83,9 +120,7 @@ class TagScreen extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      themeColor: this.props.userSetting.color
-    })
+    this.theme()
   }
 }
 
@@ -152,10 +187,9 @@ const styles = StyleSheet.create({
 
 // const mapState = state => ({ tagList: state.tagReducer })
 const mapState = state => {
-  console.log(state)
   return {
     tagList: state.tagReducer,
     userSetting: state.userReducer
   }
 }
-export default connect(mapState, { tagSave })(TagScreen)
+export default connect(mapState, { tagSave, changeTag })(TagScreen)

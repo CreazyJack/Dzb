@@ -4,7 +4,6 @@ import { AntDesign } from '@expo/vector-icons'
 
 
 const HomeRightBtn = ({ tintColor, navigate, purpose, name, tagIndex }) => {
-  // console.log(tagIndex)
   return (
     <TouchableOpacity
       style={styles.rightBtn}

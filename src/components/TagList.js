@@ -13,7 +13,16 @@ class TagList extends Component {
     return (
       <FlatList
         data={this.props.tagList}
-        renderItem={({ item, index }) => <TagBox data={item} index={index} toTagContent={this.props.toTagContent} userSetting={this.props.userSetting} />}
+        renderItem={({ item, index }) => (
+          <TagBox
+            data={item}
+            index={index}
+            toTagContent={this.props.toTagContent}
+            userSetting={this.props.userSetting}
+            isLongClick={this.props.isLongClick}
+            longClick={this.props.longClick}
+          />
+        )}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         ListEmptyComponent={
@@ -29,7 +38,7 @@ class TagList extends Component {
           </Text> */}
             <TouchableOpacity
               style={styles.plusBox}
-              onPress={this.props.newTag}
+              onPress={() => this.props.newTag('新建分类')}
             >
               <AntDesign
                 name='plus'

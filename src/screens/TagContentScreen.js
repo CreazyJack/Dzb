@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 class TagContentScreen extends Component {
   render() {
-    console.log(this.props.route.params)
+    // console.log(this.props.route.params)
     // console.log(this.props.listData)
     const tagIndex = this.props.route.params.tagIndex
     return (
@@ -21,11 +21,14 @@ class TagContentScreen extends Component {
     )
   }
 
-  toNote = (name) => {
+  toNote = (name, noteColor, noteTxt, noteIndex) => {
     this.props.navigation.navigate('NoteScreen', {
       name,
       id: this.props.route.params.name,
-      tagIndex: this.props.route.params.tagIndex
+      tagIndex: this.props.route.params.tagIndex,
+      noteColor,
+      noteTxt,
+      noteIndex
     })
   }
 

@@ -8,6 +8,7 @@ export default class TagBox extends PureComponent {
       <TouchableOpacity
         style={{ ...styles.container, borderColor: this.props.data.color }}
         onPress={() => this.props.toTagContent(this.props.data.tagName, this.props.index)}
+        onLongPress={() => this.props.longClick(this.props.data.tagName, this.props.index)}
       >
         <Text
           style={{

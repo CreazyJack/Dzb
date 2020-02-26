@@ -1,5 +1,7 @@
 export default {
   SaveTag: 'SaveTag',
   SaveNote: 'SaveNote',
-  UserSetting: 'UserSetting'
+  UserSetting: 'UserSetting',
+  ChangeTag: 'ChangeTag',
+  ChangeNote: 'ChangeNote'
 }

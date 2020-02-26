@@ -25,7 +25,7 @@ export default class TagContentList extends PureComponent {
           </Text> */}
             <TouchableOpacity
               style={{ ...styles.plusBox, borderColor: this.props.color }}
-              onPress={() => this.props.toNote('添加想法')}
+              onPress={() => this.props.toNote('添加想法', null)}
             >
               <AntDesign
                 name='plus'

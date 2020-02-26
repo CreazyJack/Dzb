@@ -1,10 +1,9 @@
 // 为了避免 actionType 重复，所以一般会把 actionType 放在一个文件里统一管理，也可以避免写错 actionType
 import actionType from "../actions/actionType"
-import { colors } from '../../constant/theme'
 // 为了方便测试，这里有一个个初始化的状态
 // 如果是列表页，此处是一个数组，而对于详情页来说，此处是一个对象
 const initState = {
-  color: colors[0].color,
+  color: '#1abc9c',
   tagFontSize: 18,
   noteFontSize: 16,
 }

@@ -7,11 +7,11 @@ import TagContentScreen from '../screens/TagContentScreen'
 import NoteScreen from '../screens/NoteScreen'
 import HomeRightBtn from '../components/HomeRightBtn'
 import { DeviceEventEmitter } from 'react-native'
-
+import { connect } from 'react-redux'
 
 const Stack = createStackNavigator()
 
-export default class Nav extends React.PureComponent {
+class Nav extends React.PureComponent {
   state = {
     theme: '#f4511e'
   }
@@ -22,7 +22,7 @@ export default class Nav extends React.PureComponent {
           initialRouteName='Home'
           screenOptions={{
             headerStyle: {
-              backgroundColor: this.state.theme,
+              backgroundColor: this.props.color,
               height: 70,
             },
             headerTintColor: '#fff',
@@ -46,9 +46,9 @@ export default class Nav extends React.PureComponent {
           <Stack.Screen
             name="TagScreen"
             component={TagScreen}
-            options={{
-              title: '新建分类'
-            }}
+            options={({ route }) => ({
+              title: route.params.name,
+            })}
           />
           <Stack.Screen
             name="TagContentScreen"
@@ -79,3 +79,6 @@ export default class Nav extends React.PureComponent {
     })
   }
 }
+
+const mapState = state => ({ color: state.userReducer.color })
+export default connect(mapState)(Nav)

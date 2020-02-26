@@ -1,22 +1,27 @@
-import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import React, { PureComponent } from 'react'
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, Keyboard } from 'react-native'
 import { colors } from '../constant/theme'
 import { connect } from 'react-redux'
 import { Overlay } from 'react-native-elements'
 import ThemList from '../components/ThemList'
-import { noteSave } from '../redux/actions/tagSave'
+import { noteSave, changeNote } from '../redux/actions/tagSave'
 
-class NoteScreen extends Component {
+
+const alert = Alert.alert
+class NoteScreen extends PureComponent {
   state = {
     text: null,
     isSaving: false,
-    themeColor: '#f4511e',
+    themeColor: null,
     isVisible: false,
   }
   render() {
-    const index = this.props.route.params.tagIndex
+    // console.log(this.props.route.params)
+    const tagIndex = this.props.route.params.tagIndex
     // 获得分类标签的颜色
-    const tagColor = this.props.listData[index].color
+    const tagColor = this.props.listData[tagIndex].color
+    const noteColor = this.props.route.params.noteColor
+    const defaultTxt = this.props.route.params.noteTxt
     return (
       <View style={styles.container}>
         <Text style={{ ...styles.title, color: tagColor }}>请输入内容：</Text>
@@ -27,6 +32,7 @@ class NoteScreen extends Component {
             maxLength={150}
             onChangeText={value => this.setState({ text: value })}
             multiline
+            defaultValue={noteColor ? defaultTxt : null}
           />
         </View>
         <TouchableOpacity
@@ -34,13 +40,17 @@ class NoteScreen extends Component {
           onPress={this.changeTheme}
         >
           <Text style={{ ...styles.subTxt, color: tagColor }}>主题:</Text>
-          <View style={{ ...styles.themeBtn, backgroundColor: this.state.themeColor }} />
+          <View
+            style={{
+              ...styles.themeBtn,
+              backgroundColor: this.state.themeColor
+            }} />
         </TouchableOpacity>
         <TouchableOpacity
           style={{ ...styles.subBtn, borderColor: tagColor }}
           onPress={this.subBtn}
         >
-          <Text style={{ ...styles.subTxt, color: tagColor }}>保存</Text>
+          <Text style={{ ...styles.subTxt, color: tagColor }}>{noteColor ? '保存修改' : '添加'}</Text>
         </TouchableOpacity>
         <Overlay
           isVisible={this.state.isVisible}
@@ -56,6 +66,12 @@ class NoteScreen extends Component {
     )
   }
   theme = () => {
+    if (this.props.route.params.noteColor) {
+      this.setState({
+        themeColor: this.props.route.params.noteColor
+      })
+      return
+    }
     const index = this.props.route.params.tagIndex
     const tagColor = this.props.listData[index].color
     this.setState({
@@ -63,19 +79,36 @@ class NoteScreen extends Component {
     })
   }
   subBtn = () => {
-    // 防止重复保存👇
-    if (this.state.isSaving === true) {
-      return
-    }
     const data = this.props.listData
     const changeData = this.state.text
     const tagIndex = this.props.route.params.tagIndex
     const color = this.state.themeColor
-    // this.props.noteSave(data, changeData, tagIndex, color)
-    this.props.noteSave(data, changeData, tagIndex, color)
+    // 防止重复保存👇
+    if (this.state.isSaving === true) {
+      return
+    }
+    if (!changeData) {
+      if (this.props.route.params.noteTxt) {
+        const noteIndex = this.props.route.params.noteIndex
+        this.props.changeNote(data, this.props.route.params.noteTxt, tagIndex, color, noteIndex)
+        this.setState({ isSaving: true }, () => this.props.navigation.navigate('TagContentScreen'))
+        return
+      }
+      alert('请先输入内容再保存哦')
+      return
+    }
+    if (this.props.route.params.noteTxt) {
+      const noteIndex = this.props.route.params.noteIndex
+      // console.log(data, changeData, tagIndex, color, noteIndex)
+      this.props.changeNote(data, changeData, tagIndex, color, noteIndex)
+    } else {
+      this.props.noteSave(data, changeData, tagIndex, color)
+    }
     this.setState({ isSaving: true }, () => this.props.navigation.navigate('TagContentScreen'))
   }
   changeTheme = () => {
+    // 解决键盘引起的无法聚焦的问题👇
+    Keyboard.dismiss()
     this.setState({
       isVisible: true
     })
@@ -155,4 +188,4 @@ const styles = StyleSheet.create({
 
 
 const mapState = state => ({ listData: state.tagReducer })
-export default connect(mapState, { noteSave })(NoteScreen)
+export default connect(mapState, { noteSave, changeNote })(NoteScreen)
