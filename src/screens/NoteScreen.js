@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, Keyboard } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { colors } from '../constant/theme'
 import { connect } from 'react-redux'
 import { Overlay } from 'react-native-elements'
@@ -23,7 +23,7 @@ class NoteScreen extends PureComponent {
     const noteColor = this.props.route.params.noteColor
     const defaultTxt = this.props.route.params.noteTxt
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior='height'>
         <Text style={{ ...styles.title, color: tagColor }}>请输入内容：</Text>
         <View style={{ ...styles.inputBox, borderColor: tagColor }}>
           <TextInput
@@ -62,7 +62,7 @@ class NoteScreen extends PureComponent {
         >
           <ThemList click={this.clickColor} />
         </Overlay>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
   theme = () => {

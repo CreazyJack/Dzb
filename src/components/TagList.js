@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
-import { height } from '../constant/theme'
+import { height, colors } from '../constant/theme'
 import { AntDesign } from '@expo/vector-icons'
 import TagBox from './TagBox'
 // import { connect } from 'react-redux'
@@ -37,15 +37,15 @@ class TagList extends Component {
               哎呀，还没有内容，点击下面立即开始！
           </Text> */}
             <TouchableOpacity
-              style={styles.plusBox}
+              style={{ ...styles.plusBox, borderColor: this.props.userSetting.color }}
               onPress={() => this.props.newTag('新建分类')}
             >
               <AntDesign
                 name='plus'
                 size={90}
-                color='#f4511e'
+                color={this.props.userSetting.color}
               />
-              <Text style={styles.plusText}>
+              <Text style={{ ...styles.plusText, color: this.props.userSetting.color }}>
                 创建新分类
             </Text>
             </TouchableOpacity>

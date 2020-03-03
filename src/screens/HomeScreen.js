@@ -2,18 +2,17 @@ import React from 'react'
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import TagList from '../components/TagList'
 import { connect } from 'react-redux'
-import { tagSave } from '../redux/actions/tagSave'
+import { tagSave, deleteTag } from '../redux/actions/tagSave'
 import Modal from "react-native-modal"
 import { AntDesign } from '@expo/vector-icons'
-import { Alert } from 'react-native'
-import { set } from 'react-native-reanimated'
+import { width } from '../constant/theme'
 
 class Home extends React.PureComponent {
 	state = {
 		isLongClick: false,
 		tagIndex: null,
 		name: null,
-		isDelete: false
+		isDelete: false,
 	}
 	render() {
 		return (
@@ -35,6 +34,7 @@ class Home extends React.PureComponent {
 					backdropOpacity={0.1}
 					animationInTiming={100}
 					animationOutTiming={100}
+				// hasBackdrop={false}
 				>
 					<View style={styles.popupList}>
 						<TouchableOpacity
@@ -59,7 +59,7 @@ class Home extends React.PureComponent {
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={styles.iconBox}
-							onPress={this.deleteTag}
+							onPress={() => this.setState({ isLongClick: false })}
 						>
 							<AntDesign
 								name='back'
@@ -82,8 +82,8 @@ class Home extends React.PureComponent {
 					animationOut="zoomOutUp"
 				>
 					<View style={{
-						height: 150,
-						width: 220,
+						height: 120,
+						width: width * 0.6,
 						backgroundColor: 'white',
 						alignSelf: 'center',
 						borderRadius: 10,
@@ -102,17 +102,22 @@ class Home extends React.PureComponent {
 								flexDirection: 'row',
 								width: 150,
 								// height: 80,
-								marginTop: 20,
+								paddingTop: 20,
+								paddingBottom: 10,
 								justifyContent: 'space-around'
 							}}
 						>
-							<TouchableOpacity>
+							<TouchableOpacity
+								onPress={this.deleteConfirm}
+							>
 								<Text style={{
 									fontSize: 16,
 									color: this.props.userSetting.color
 								}}>确定</Text>
 							</TouchableOpacity>
-							<TouchableOpacity>
+							<TouchableOpacity
+								onPress={this.deleteConsole}
+							>
 								<Text style={{
 									fontSize: 16,
 									color: this.props.userSetting.color
@@ -126,7 +131,7 @@ class Home extends React.PureComponent {
 	}
 
 	toTagContent = (name, tagIndex) => {
-		this.props.navigation.navigate('TagContentScreen', { name, tagIndex })
+		this.props.navigation.navigate('TagContentScreen', { name, tagIndex, headerShown: true })
 	}
 
 	newTag = (name) => {
@@ -161,14 +166,22 @@ class Home extends React.PureComponent {
 		this.setState({
 			isDelete: true
 		})
-		// Alert.alert(
-		// 	'删除警告！',
-		// 	`确定要删除:${this.state.name}?`,
-		// 	[
-		// 		{ text: '确定', onPress: () => console.log('点击确定') },
-		// 		{ text: '取消', onPress: () => console.log('点击取消') }
-		// 	]
-		// )
+	}
+
+	deleteConfirm = () => {
+		let data = this.props.tagList
+		data.splice(this.state.tagIndex, 1)
+		this.setState({
+			isDelete: false,
+			isLongClick: false
+		})
+		this.props.deleteTag(data)
+	}
+
+	deleteConsole = () => {
+		this.setState({
+			isDelete: false
+		})
 	}
 }
 
@@ -179,12 +192,10 @@ const styles = StyleSheet.create({
 	},
 	modal: {
 		margin: 0,
-		// height: 50,
 		justifyContent: 'flex-end'
 	},
 	popupList: {
 		height: 50,
-		// width: 50,
 		flexDirection: 'row',
 		backgroundColor: 'white',
 		justifyContent: 'space-around',
@@ -202,6 +213,6 @@ const styles = StyleSheet.create({
 
 const mapState = state => ({ tagList: state.tagReducer, userSetting: state.userReducer })
 
-export default connect(mapState, { tagSave })(Home)
+export default connect(mapState, { tagSave, deleteTag })(Home)
 
 // export default Home

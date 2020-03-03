@@ -3,5 +3,7 @@ export default {
   SaveNote: 'SaveNote',
   UserSetting: 'UserSetting',
   ChangeTag: 'ChangeTag',
-  ChangeNote: 'ChangeNote'
+  ChangeNote: 'ChangeNote',
+  DeleteTag: 'DeleteTag',
+  DeleteNote: 'DeleteNote'
 }

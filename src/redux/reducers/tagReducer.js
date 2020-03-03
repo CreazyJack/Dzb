@@ -9,21 +9,34 @@ export default (state = initState, action) => {
   // 根据不同的 action.type ，做不同的处理，每次返回一个新的 state ，返回的类型要一样
   switch (action.type) {
     case actionType.SaveTag:
-      return [...state, action.payload.data]
-    case actionType.ChangeTag:
-      var listData1 = JSON.stringify(action.payload.data)
+      state = [...state, action.payload.listData]
+      return state
+    case actionType.DeleteTag:
+      state = action.payload.listData
+      return state
+    case actionType.DeleteNote:
+      // 做一次深拷贝，让组件自动刷新 state，多层嵌套的数组或对象无法触发自动刷新
+      var listData1 = JSON.stringify(action.payload.listData)
       var listData2 = JSON.parse(listData1)
-      return listData2
+      state = listData2
+      return state
+    case actionType.ChangeTag:
+      var listData1 = JSON.stringify(action.payload.listData)
+      var listData2 = JSON.parse(listData1)
+      state = listData2
+      return state
     case actionType.SaveNote:
       // 做一次深拷贝，让组件自动刷新 state，多层嵌套的数组或对象无法触发自动刷新
       var listData1 = JSON.stringify(action.payload.listData)
       var listData2 = JSON.parse(listData1)
-      return listData2
+      state = listData2
+      return state
     case actionType.ChangeNote:
       // 做一次深拷贝，让组件自动刷新 state，多层嵌套的数组或对象无法触发自动刷新
       var listData1 = JSON.stringify(action.payload.listData)
       var listData2 = JSON.parse(listData1)
-      return listData2
+      state = listData2
+      return state
     // 一定要有一个 default ，当 actionType 不对的时候，就不做任何处理，返回上一次的 state 
     default:
       return state

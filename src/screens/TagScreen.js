@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, Keyboard } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { colors } from '../constant/theme'
 import { connect } from 'react-redux'
 import { tagSave, changeTag } from '../redux/actions/tagSave'
@@ -12,7 +12,8 @@ class TagScreen extends Component {
     text: null,
     isVisible: false,
     themeColor: null,
-    isSaving: false
+    isSaving: false,
+    isNull: false
   }
   render() {
     // console.log(this.props.route.params)
@@ -20,7 +21,7 @@ class TagScreen extends Component {
     const changeTag = this.props.route.params.changeTag || null
     const userData = this.props.userSetting
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Text style={{ ...styles.title, color: userData.color }}>请输入分类名：</Text>
         <View style={{ ...styles.inputBox, borderColor: userData.color }}>
           <TextInput
@@ -55,9 +56,32 @@ class TagScreen extends Component {
         >
           <ThemList click={this.clickColor} />
         </Overlay>
-      </View>
+        <Overlay
+          isVisible={this.state.isNull}
+          // windowBackgroundColor="rgba(255, 255, 255, .5)"
+          // overlayBackgroundColor="red"
+          width={"auto"}
+          height={100}
+          onBackdropPress={() => this.setState({ isNull: false })}
+          // containerStyle={{ justifyContent: 'flex-end', flex: 1, alignItems: 'flex-end' }}
+          overlayStyle={{ paddingHorizontal: 20, paddingTop: 15 }}
+        >
+          <>
+            <Text style={{ fontSize: 18, color: this.state.themeColor }}>请输入内容再保存哦！</Text>
+            <TouchableOpacity
+              style={{
+                marginTop: 30
+              }}
+              onPress={() => this.setState({isNull: false}) }
+            >
+              <Text style={{ textAlign: 'center', color: this.state.themeColor,fontSize: 16 }}>确定</Text>
+            </TouchableOpacity>
+          </>
+        </Overlay>
+      </KeyboardAvoidingView>
     )
   }
+
   theme = () => {
     if (this.props.route.params.changeTag) {
       const index = this.props.route.params.tagIndex
@@ -71,6 +95,7 @@ class TagScreen extends Component {
       themeColor: this.props.userSetting.color
     })
   }
+
   saveData = () => {
     const tagData = {
       tagName: this.state.text,
@@ -79,6 +104,7 @@ class TagScreen extends Component {
     }
     this.props.tagSave(tagData)
   }
+
   subBtn = () => {
     const data = this.props.tagList
     const changeData = this.state.text
@@ -91,10 +117,11 @@ class TagScreen extends Component {
       if (this.props.route.params.changeTag) {
         data[tagIndex].color = color
         this.props.changeTag(data)
-        this.props.navigation.navigate('Home')
+        this.setState({ isSaving: true }, this.props.navigation.navigate('Home'))
         return
       }
-      Alert.alert('请先输入内容再保存哦')
+      // Alert.alert('请先输入内容再保存哦')
+      this.setState({ isNull: true })
       return
     }
     if (this.props.route.params.changeTag) {
@@ -104,14 +131,16 @@ class TagScreen extends Component {
     } else {
       this.saveData()
     }
-    this.props.navigation.navigate('Home')
+    this.setState({ isSaving: true }, () => this.props.navigation.navigate('Home'))
   }
+
   changeTheme = () => {
     Keyboard.dismiss()
     this.setState({
       isVisible: true
     })
   }
+
   clickColor = (color) => {
     this.setState({
       isVisible: false,

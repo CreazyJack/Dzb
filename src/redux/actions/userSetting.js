@@ -1,7 +1,11 @@
 import actionType from './actionType'
 
-export const userSetting = () => {
+export const save = (data) => {
+  console.log(data)
   return {
-    type: actionType.userSetting
+    type: actionType.UserSetting,
+    payLoad: {
+      userData: data
+    }
   }
 }

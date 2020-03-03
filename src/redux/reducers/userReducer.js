@@ -11,7 +11,8 @@ const initState = {
 export default (state = initState, action) => {
   // 根据不同的 action.type ，做不同的处理，每次返回一个新的 state ，返回的类型要一样
   switch (action.type) {
-    case actionType.UserReducer:
+    case actionType.UserSetting:
+      state = action.payLoad.userData
       return state
     // 一定要有一个 default ，当 actionType 不对的时候，就不做任何处理，返回上一次的 state 
     default:

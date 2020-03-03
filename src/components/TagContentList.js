@@ -10,7 +10,17 @@ export default class TagContentList extends PureComponent {
     return (
       <FlatList
         data={this.props.listData}
-        renderItem={({ item, index }) => <TagContentBox data={item} index={index} toNote={this.props.toNote} userSetting={this.props.userSetting} />}
+        renderItem={({ item, index }) => (
+          <TagContentBox
+            data={item}
+            index={index}
+            toNote={this.props.toNote}
+            userSetting={this.props.userSetting}
+            longClick={this.props.longClick}
+            isLongClick={this.props.isLongClick}
+            pushIndex={this.props.pushIndex}
+          />
+        )}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
           <View style={styles.emptyBox}>

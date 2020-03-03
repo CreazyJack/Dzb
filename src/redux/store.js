@@ -3,7 +3,6 @@ import thunk from 'redux-thunk'
 import reducers from './reducers/reducers'
 import { AsyncStorage } from 'react-native'
 import { persistStore, persistReducer } from 'redux-persist'
-import noteReducer from './reducers/userReducer'
 // import { persistStore, autoRehydrate } from 'redux-persist-immutable'
 
 const persistConfig = {
